@@ -1,6 +1,6 @@
 {
   "name": "@rds/sdk",
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.1",
   "description": "The RDS SDK is a JavaScript library to simplify using a RDS API.",
   "keywords": [
     "Rich Data Services",

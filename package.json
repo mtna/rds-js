@@ -14,7 +14,7 @@
     "Data ingestion",
     "Data dissemination"
   ],
-  "homepage": "https://www2.richdataservices.com/",
+  "homepage": "https://www.richdataservices.com/",
   "main": "dist/rds-sdk.umd.js",
   "module": "dist/rds-sdk.es5.js",
   "typings": "dist/types/public_api.d.ts",

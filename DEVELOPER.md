@@ -78,7 +78,6 @@ You should execute all test suites before submitting a PR to GitHub:
 All the tests are executed on our Continuous Integration infrastructure. PRs can only be
 merged if the code is formatted properly and all tests are passing.
 
-<a name="clang-format"></a>
 ## Formatting your source code
 
 RDS-JS uses [prettier](https://prettier.io/) to format the source code.

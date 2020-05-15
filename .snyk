@@ -4504,3 +4504,7 @@ patch:
         patched: '2020-05-15T17:56:32.601Z'
     - commitizen > lodash:
         patched: '2020-05-15T17:56:32.601Z'
+    - commitizen > cz-conventional-changelog > @commitlint/load > lodash:
+        patched: '2020-05-15T18:50:32.266Z'
+    - commitizen > cz-conventional-changelog > @commitlint/load > @commitlint/resolve-extends > lodash:
+        patched: '2020-05-15T18:50:32.266Z'

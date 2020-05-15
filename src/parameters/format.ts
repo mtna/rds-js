@@ -1,11 +1,12 @@
 export type RdsFormatParamter =
-  | 'mtna'
-  | 'mtna_simple'
   | 'amcharts'
   | 'gcharts'
+  | 'mtna'
+  | 'mtna_simple'
   | 'plotly_bar'
   | 'plotly_boxplot'
   | 'plotly_bubble'
+  | 'plotly_heatmap'
   | 'plotly_hist'
   | 'plotly_pie'
   | 'plotly_scatter';

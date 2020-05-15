@@ -47,19 +47,22 @@
     "precommit": "lint-staged",
     "travis-deploy-once": "travis-deploy-once --pro",
     "prepush": "npm run test:prod && npm run build",
-    "commitmsg": "commitlint -E HUSKY_GIT_PARAMS"
+    "commitmsg": "commitlint -E HUSKY_GIT_PARAMS",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
-    "@types/google.visualization": "0.0.52"
+    "@types/google.visualization": "0.0.52",
+    "snyk": "^1.321.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^7.1.2",
+    "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^7.1.2",
     "@mtna/prettier-config-ui": "^1.0.1",
     "@types/jest": "^23.3.2",
     "@types/node": "^10.11.0",
     "colors": "^1.3.2",
-    "commitizen": "^3.0.0",
+    "commitizen": "^4.0.4",
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "cz-conventional-changelog": "^2.1.0",
@@ -135,5 +138,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "snyk": true
 }

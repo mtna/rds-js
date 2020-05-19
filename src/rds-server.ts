@@ -1,41 +1,58 @@
+import { RdsVersion } from './models/server';
+import { ServerInformation } from './models/server/information';
+import { HttpResponse, HttpUtil } from './utils/http';
+
 /**
- * Singleton class that holds the RDS API server information.
- * Initialization required in order to use the sdk.
+ * An instance of a RDS API server.
+ * A basic building block to interact with a RDS API.
+ * Includes methods to query server-level information.
+ *
+ * @example
+ * ```ts
+ * const covidServer = new RdsServer('https://covid19.richdataservices.com/rds/api');
+ * covidServer
+ *  .getInfo()
+ *  .then((res: HttpResponse<ServerInformation>) =>
+ *    { console.log('Server info:', res.parsedBody); }
+ *  );
+ * ```
  */
 export class RdsServer {
-  private static instance: RdsServer;
+  /** The url to the RDS API */
+  readonly apiUrl: string;
 
-  /** @returns the RDS API url */
-  get apiUrl(): string {
-    return `${this.protocol}${this.domain}${this.port ? ':' + this.port : ''}${this.path}/api`;
-  }
-
-  private constructor(private protocol: string, private domain: string, private port: string | undefined, private path: string) {}
-
-  public static getInstance(): RdsServer {
-    if (!RdsServer.instance) {
-      throw new Error('RdsServer has not been initialized. You must call init before getting the instance.');
-    }
-
-    return RdsServer.instance;
+  /** The url for the server related API endpoints */
+  get serverUrl(): string {
+    return `${this.apiUrl}/server`;
   }
 
   /**
-   * Initialize the RDS server once to configure where the RDS API instance is hosted.
-   *
-   * @param protocol The protocol used on the site the RDS API is hosted, defaults to 'https://'
-   * @param domain The domain under which the RDS API is hosted, defaults to 'covid19.richdataservices.com'
-   * @param port Optional port where the RDS API is hosted, or undefined if not applicable
-   * @param path The path where the RDS API is hosted, defaults to '/rds'
-   * @returns the initialized `RdsServer` instance.
+   * Create a new instance of a RDS API Server.
+   * @param url The URL to the RDS API, i.e. `https://covid19.richdataservices.com/rds/api`
    */
-  public static init(protocol = 'https://', domain = 'covid19.richdataservices.com', port?: string | undefined, path = '/rds'): RdsServer {
-    if (RdsServer.instance) {
-      throw new Error('The RdsServer can only be initialized once.');
-    }
+  constructor(url: string) {
+    // Remove any trailing slashes
+    this.apiUrl = url.replace(/\/+$/, '');
+  }
 
-    RdsServer.instance = new RdsServer(protocol, domain, port, path);
+  /**
+   * Get server information.
+   * Provides the server information for RDS.
+   *
+   * @returns information about the RDS Server
+   */
+  async getInfo(): Promise<HttpResponse<ServerInformation>> {
+    return HttpUtil.get<ServerInformation>(`${this.serverUrl}/info`);
+  }
 
-    return RdsServer.instance;
+  /**
+   * Get changelog.
+   * Shows the change log of RDS providing version information about
+   * additions, changes, deprecations, fixed bugs, removals, and security enhancements.
+   *
+   * @returns an array of information about each version and the changes between them.
+   */
+  async getChangelog(): Promise<HttpResponse<RdsVersion[]>> {
+    return HttpUtil.get<RdsVersion[]>(`${this.serverUrl}/changelog`);
   }
 }

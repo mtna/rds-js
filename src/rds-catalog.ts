@@ -2,8 +2,9 @@ import { Catalog } from '@mtna/pojo-consumer-ui';
 
 import { AsyncResource } from './models/async/async-resource';
 import { DataSetMetadata } from './models/data-set-metadata';
+import { HttpResponse } from './models/http-response';
 import { RdsServer } from './rds-server';
-import { HttpResponse, HttpUtil } from './utils/http';
+import { HttpUtil } from './utils/http';
 
 /**
  * An instance of a RDS Catalog.
@@ -74,7 +75,7 @@ export class RdsCatalog extends AsyncResource {
     return new Promise<void>((resolve, reject) => {
       HttpUtil.get<Catalog>(`${this.catalogUrl}`)
         .then((res: HttpResponse<Catalog>) => {
-          if (res.parsedBody) {
+          if (res?.parsedBody) {
             // Assign all properties from the api response to this resource
             Object.assign(this, res.parsedBody);
           }

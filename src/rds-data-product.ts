@@ -2,10 +2,11 @@ import { DataProduct } from '@mtna/pojo-consumer-ui';
 
 import { AsyncResource } from './models/async/async-resource';
 import { FormattedDataSet } from './models/datasets/formatted';
+import { HttpResponse } from './models/http-response';
 import { RdsSelectParameters } from './models/parameters/select';
 import { RdsTabulateParameters } from './models/parameters/tabulate';
 import { RdsCatalog } from './rds-catalog';
-import { HttpResponse, HttpUtil } from './utils/http';
+import { HttpUtil } from './utils/http';
 import { serializeRdsParameters } from './utils/url-serializers';
 
 /**

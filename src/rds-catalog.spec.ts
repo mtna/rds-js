@@ -14,13 +14,12 @@ describe('RdsCatalog', () => {
   });
 
   describe('Setup api url', () => {
+    const catalog = new RdsCatalog(server, CATALOG_ID);
     it('When constructed, the api url should be set', () => {
-      const catalog = new RdsCatalog(server, CATALOG_ID);
       expect(catalog.apiUrl).toEqual(COVID_API_URL);
     });
 
     it('When constructed, the catalog url should be set', () => {
-      const catalog = new RdsCatalog(server, CATALOG_ID);
       expect(catalog.catalogUrl).toEqual(`${COVID_API_URL}/api/catalog/${CATALOG_ID}`);
     });
   });
@@ -29,6 +28,7 @@ describe('RdsCatalog', () => {
     it(`When called on the "${CATALOG_ID}" catalog, then the api url should be /api/catalog/${CATALOG_ID}/metadata`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation();
       const catalog = new RdsCatalog(server, CATALOG_ID);
+      expect.assertions(2);
       return catalog.getMetadata().then(() => {
         expect(spy).toHaveBeenCalledTimes(1);
         expect(spy).toHaveBeenCalledWith(`${COVID_API_URL}/api/catalog/${CATALOG_ID}/metadata`);
@@ -38,8 +38,12 @@ describe('RdsCatalog', () => {
   });
 
   describe(`Resolve the catalog's properties`, () => {
+    let catalog: RdsCatalog;
+    beforeEach(() => {
+      catalog = new RdsCatalog(server, CATALOG_ID);
+    });
     it(`When called, then resolving should be set to true`, () => {
-      const catalog = new RdsCatalog(server, CATALOG_ID);
+      expect.assertions(1);
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation(
         () =>
           new Promise(resolve => {
@@ -52,16 +56,16 @@ describe('RdsCatalog', () => {
       });
     });
     it(`When the resolution completes, then resolving should be set to false`, () => {
-      const catalog = new RdsCatalog(server, CATALOG_ID);
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation(() => new Promise(resolve => resolve()));
+      expect.assertions(1);
       return catalog.resolve().then(() => {
         expect(catalog.isResolving()).toBe(false);
         spy.mockRestore();
       });
     });
     it(`When the resolution completes, then it should be marked as resolved`, () => {
-      const catalog = new RdsCatalog(server, CATALOG_ID);
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation(() => new Promise(resolve => resolve()));
+      expect.assertions(2);
       expect(catalog.isResolved()).toBe(false);
       return catalog.resolve().then(() => {
         expect(catalog.isResolved()).toBe(true);
@@ -70,7 +74,7 @@ describe('RdsCatalog', () => {
     });
     it(`When the resolution completes, then the catalog's properties should be set`, () => {
       fetchMock.mockOnce(JSON.stringify({ catalogCount: 10 }));
-      const catalog = new RdsCatalog(server, CATALOG_ID);
+      expect.assertions(1);
       return catalog.resolve().then(() => {
         expect(catalog.catalogCount).toBe(10);
       });
@@ -78,7 +82,6 @@ describe('RdsCatalog', () => {
     it(`When the resolution fails, then an error should be thrown`, () => {
       const fakeError = new Error('fake error message');
       fetchMock.mockRejectOnce(fakeError);
-      const catalog = new RdsCatalog(server, CATALOG_ID);
       expect.assertions(1);
       return catalog.resolve().catch(e => {
         expect(e).toEqual(fakeError);

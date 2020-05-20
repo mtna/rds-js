@@ -51,11 +51,11 @@
     "prepare": "npm run snyk-protect"
   },
   "dependencies": {
-    "@mtna/model-base-ui": "^9.0.5",
-    "@mtna/model-core-ui": "^9.0.6",
-    "@mtna/model-predefined-data-ui": "^1.1.5",
-    "@mtna/pojo-base-ui": "^9.0.1",
-    "@mtna/pojo-consumer-ui": "^1.1.8",
+    "@mtna/model-base-ui": "^9.0.6",
+    "@mtna/model-core-ui": "^10.0.0",
+    "@mtna/model-predefined-data-ui": "^1.1.6",
+    "@mtna/pojo-base-ui": "^9.0.2",
+    "@mtna/pojo-consumer-ui": "^1.1.9",
     "@types/google.visualization": "0.0.52",
     "snyk": "^1.321.0"
   },
@@ -73,6 +73,7 @@
     "husky": "^1.0.1",
     "jest": "^26.0.1",
     "jest-config": "^26.0.1",
+    "jest-fetch-mock": "^3.0.3",
     "lint-staged": "^8.0.0",
     "lodash.camelcase": "^4.3.0",
     "prettier": "^1.14.3",
@@ -116,7 +117,7 @@
     "transform": {
       ".(ts|tsx)": "ts-jest"
     },
-    "testEnvironment": "node",
+    "testEnvironment": "jsdom",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ts",
@@ -137,6 +138,9 @@
     },
     "collectCoverageFrom": [
       "src/*.{js,ts}"
+    ],
+    "setupFiles": [
+      "./tools/setupJest.js"
     ]
   },
   "prettier": "@mtna/prettier-config-ui",

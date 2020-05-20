@@ -65,7 +65,7 @@ export class RdsDataProduct extends AsyncResource {
     return new Promise<void>((resolve, reject) => {
       HttpUtil.get<DataProduct>(`${this.dataProductUrl}`)
         .then((res: HttpResponse<DataProduct>) => {
-          if (res.parsedBody) {
+          if (res?.parsedBody) {
             // Assign all properties from the api response to this resource
             Object.assign(this, res.parsedBody);
           }
@@ -86,7 +86,7 @@ export class RdsDataProduct extends AsyncResource {
    * @returns the number of records within the data product.
    */
   async count(): Promise<HttpResponse<number>> {
-    return HttpUtil.get<number>(`${this.queryUrl}/${this.catalog.catalogId}/${this.dataProductId}/count`);
+    return HttpUtil.get<number>(`${this.queryUrl}/count`);
   }
 
   /**
@@ -99,7 +99,7 @@ export class RdsDataProduct extends AsyncResource {
    */
   async select<DS extends FormattedDataSet>(parameters?: RdsSelectParameters): Promise<HttpResponse<DS>> {
     return HttpUtil.get<DS>(
-      `${this.queryUrl}/${this.catalog.catalogId}/${this.dataProductId}/select?${serializeRdsParameters(parameters)}`
+      `${this.queryUrl}/select?${serializeRdsParameters(parameters)}`
     );
   }
 
@@ -115,7 +115,7 @@ export class RdsDataProduct extends AsyncResource {
    */
   async tabulate<DS extends FormattedDataSet>(parameters?: RdsTabulateParameters): Promise<HttpResponse<DS>> {
     return HttpUtil.get<DS>(
-      `${this.queryUrl}/${this.catalog.catalogId}/${this.dataProductId}/tabulate?${serializeRdsParameters(parameters)}`
+      `${this.queryUrl}/tabulate?${serializeRdsParameters(parameters)}`
     );
   }
 

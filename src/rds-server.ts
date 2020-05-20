@@ -1,9 +1,10 @@
 import { Catalog } from '@mtna/pojo-consumer-ui';
 
+import { HttpResponse } from './models/http-response';
 import { ParsedUrl } from './models/parsed-url';
 import { RdsVersion } from './models/server';
 import { ServerInformation } from './models/server/information';
-import { HttpResponse, HttpUtil } from './utils/http';
+import { HttpUtil } from './utils/http';
 import { _parseUrl } from './utils/url-parser';
 
 /**

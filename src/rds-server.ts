@@ -1,6 +1,10 @@
+import { Catalog } from '@mtna/pojo-consumer-ui';
+
+import { ParsedUrl } from './models/parsed-url';
 import { RdsVersion } from './models/server';
 import { ServerInformation } from './models/server/information';
 import { HttpResponse, HttpUtil } from './utils/http';
+import { _parseUrl } from './utils/url-parser';
 
 /**
  * An instance of a RDS API server.
@@ -9,7 +13,7 @@ import { HttpResponse, HttpUtil } from './utils/http';
  *
  * @example
  * ```ts
- * const covidServer = new RdsServer('https://covid19.richdataservices.com/rds/api');
+ * const covidServer = new RdsServer('https://covid19.richdataservices.com/rds');
  * covidServer
  *  .getInfo()
  *  .then((res: HttpResponse<ServerInformation>) =>
@@ -18,21 +22,59 @@ import { HttpResponse, HttpUtil } from './utils/http';
  * ```
  */
 export class RdsServer {
-  /** The url to the RDS API */
+  /**
+   * Factory method for instantiating an RdsServer
+   * from the individual url parts.
+   *
+   * @example
+   * ```ts
+   * const server = RdsServer.fromUrlParts('https://','covid19.richdataservices.com', '/rds');
+   * ```
+   *
+   * @param protocol The protocol used on the site the RDS API is hosted, defaults to 'https'
+   * @param domain The domain under which the RDS API is hosted, i.e. 'covid19.richdataservices.com'
+   * @param path The path where the RDS API is hosted, defaults to '/rds'
+   * @param port Optional port where the RDS API is hosted, or undefined if not applicable
+   *
+   * @returns a new RdsServer
+   */
+  static fromUrlParts(protocol = 'https', domain: string, path = '/rds', port?: string | undefined): RdsServer {
+    return new this(`${protocol}://${domain}${port ? ':' + port : ''}${path}`);
+  }
+
+  /** The base url to the RDS API, i.e. `https://covid19.richdataservices.com/rds` */
   readonly apiUrl: string;
+  /** The url parsed out into its partials */
+  readonly parsedUrl: ParsedUrl;
 
   /** The url for the server related API endpoints */
   get serverUrl(): string {
-    return `${this.apiUrl}/server`;
+    return `${this.apiUrl}/api/server`;
   }
 
   /**
    * Create a new instance of a RDS API Server.
-   * @param url The URL to the RDS API, i.e. `https://covid19.richdataservices.com/rds/api`
+   * @param url The full URL to the RDS API, i.e. `https://covid19.richdataservices.com/rds`
    */
   constructor(url: string) {
     // Remove any trailing slashes
-    this.apiUrl = url.replace(/\/+$/, '');
+    // and parse url
+    this.parsedUrl = _parseUrl(url.replace(/\/+$/, ''));
+    // Construct the api url
+    this.apiUrl = `${this.parsedUrl.protocol}://${this.parsedUrl.host}${this.parsedUrl.port ? ':' + this.parsedUrl.port : ''}${
+      this.parsedUrl.path
+    }`;
+  }
+
+  /**
+   * Get changelog.
+   * Shows the change log of RDS providing version information about
+   * additions, changes, deprecations, fixed bugs, removals, and security enhancements.
+   *
+   * @returns an array of information about each version and the changes between them.
+   */
+  async getChangelog(): Promise<HttpResponse<RdsVersion[]>> {
+    return HttpUtil.get<RdsVersion[]>(`${this.serverUrl}/changelog`);
   }
 
   /**
@@ -46,13 +88,18 @@ export class RdsServer {
   }
 
   /**
-   * Get changelog.
-   * Shows the change log of RDS providing version information about
-   * additions, changes, deprecations, fixed bugs, removals, and security enhancements.
+   * Get the root catalog of the system.
+   * This will hold a list of all the catalogs and data products
+   * that are available on this server. This would ideally be
+   * used to power an entry point into an application.
+   * The catalog provides a starting point for users to view
+   * what is available to them and drill down into a catalog
+   * or data product of their interest. The catalogs and products
+   * may have descriptive metadata on them that is useful to display.
    *
-   * @returns an array of information about each version and the changes between them.
+   * @returns the root catalog of the RDS server
    */
-  async getChangelog(): Promise<HttpResponse<RdsVersion[]>> {
-    return HttpUtil.get<RdsVersion[]>(`${this.serverUrl}/changelog`);
+  async getRootCatalog(): Promise<HttpResponse<Catalog>> {
+    return HttpUtil.get<Catalog>(`${this.apiUrl}/api/catalog`);
   }
 }

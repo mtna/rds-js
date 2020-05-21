@@ -55,8 +55,7 @@ See the [documentation][docs] for the full SDK API.
 
 ### RdsServer
 
-A basic building block to interact with a RDS API.
-Includes methods to query server-level information.
+Represents a single RDS API server, provides methods to query server-level information.
 
 > Get the root catalog on the server
 ```ts
@@ -73,8 +72,7 @@ server
 
 ### RdsCatalog
 
-A basic building block to interact with a RDS API.
-Represents a single catalog, includes methods to query catalog related information.
+Represents a single catalog on a server, provides methods to query catalog related information.
 
 > Resolve properties about the catalog
 ```ts
@@ -95,8 +93,7 @@ catalog
 
 ### RdsDataProduct
 
-A basic building block to interact with a RDS API.
-Represents a single data product within a catalog, includes methods to query data product related information.
+Represents a single data product within a catalog, provides methods to query data product related information.
 
 > Run a **select** query to get record level microdata.
 
@@ -124,7 +121,7 @@ dataProduct
 > Run a **tabulation** to get aggregate level data about the dimensions and measures specified.
 
 ```typescript
-import { AmchartsDataSet, HttpResponse, RdsDataProduct, RdsTabulateParameters } from '@rds/sdk';
+import { PlotlyDataSet, HttpResponse, RdsDataProduct, RdsTabulateParameters } from '@rds/sdk';
 
 // Given the catalog from the above examples
 const dataProduct = new RdsDataProduct(catalog, 'jhu_country');

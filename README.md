@@ -9,10 +9,10 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=for-the-badge)](https://github.com/semantic-release/semantic-release)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=for-the-badge)](https://github.com/prettier/prettier)
 
----
 ## Checkout our awesome [examples/showcases][examples] repo.
+<br>
 
-<a href="https://www.richdataservices.com"><img src="./resources/rds-logo.png" align="left" target="_blank" hspace="10" vspace="6" style="max-width: 200px"></a>
+<a href="https://www.richdataservices.com"><img src="./resources/rds-logo.png" align="left" width="200"></a>
 
 **Rich Data Services** (or **RDS**) is a suite of REST APIs designed by Metadata Technology North America (MTNA) to meet various needs for data engineers, managers, custodians, and consumers. RDS provides a range of services including data profiling, mapping, transformation, validation, ingestion, and dissemination. For more information about each of these APIs and how you can incorporate or consume them as part of your work flow please visit the MTNA website.
 

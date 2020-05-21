@@ -3,6 +3,7 @@ import { Catalog } from '@mtna/pojo-consumer-ui';
 import { AsyncResource } from './models/async/async-resource';
 import { DataSetMetadata } from './models/data-set-metadata';
 import { HttpResponse } from './models/http-response';
+import { RdsDataProduct } from './rds-data-product';
 import { RdsServer } from './rds-server';
 import { HttpUtil } from './utils/http';
 
@@ -14,7 +15,7 @@ import { HttpUtil } from './utils/http';
  * @example
  * ```ts
  * const covidServer = new RdsServer('https://covid19.richdataservices.com/rds');
- * const covidCatalog = new RdsCatalog(covidServer, 'covid19');
+ * const covidCatalog = new RdsCatalog(covidServer, 'int');
  * covidCatalog
  *  .getMetadata()
  *  .then(
@@ -46,6 +47,29 @@ export class RdsCatalog extends AsyncResource {
    */
   constructor(protected readonly server: RdsServer, public readonly catalogId: string, resolve = false) {
     super(resolve);
+  }
+
+  /**
+   * Create and get an instance of a RDS Data Product that exists on
+   * this RdsCatalog. This is a convenience method, these two code snippets
+   * are equivalent:
+   * ```ts
+   * const dataProduct = new RdsServer('https://covid19.richdataservices.com/rds')
+   *                      .getCatalog('int')
+   *                      .getDataProduct('jhu_country');
+   * ```
+   * and
+   * ```ts
+   * const server = new RdsServer('https://covid19.richdataservices.com/rds');
+   * const catalog = new RdsCatalog(server, 'int');
+   * const dataProduct = new RdsDataProduct(catalog, 'jhu_country');
+   * ```
+   * @param dataProductId the ID of the specific data product
+   * @param resolve whether to automatically start resolving all the data product's own properties, defaults to false
+   * @returns a new RdsDataProduct
+   */
+  getDataProduct(dataProductId: string, resolve = false): RdsDataProduct {
+    return new RdsDataProduct(this, dataProductId, resolve);
   }
 
   /**

@@ -1,31 +1,38 @@
 import fetchMock from 'jest-fetch-mock';
 
 import { RdsCatalog } from './rds-catalog';
+import { RdsDataProduct } from './rds-data-product';
 import { RdsServer } from './rds-server';
 import { HttpUtil } from './utils/http';
 
 describe('RdsCatalog', () => {
   const COVID_API_URL = 'https://covid19.richdataservices.com/rds';
-  const CATALOG_ID = 'covid19';
+  const CATALOG_ID = 'int';
   const server = new RdsServer(COVID_API_URL);
 
   it('can instantiate', () => {
     expect(new RdsCatalog(server, CATALOG_ID)).toBeInstanceOf(RdsCatalog);
   });
 
-  describe('Setup api url', () => {
+  describe('Constructor', () => {
     const catalog = new RdsCatalog(server, CATALOG_ID);
-    it('When constructed, the api url should be set', () => {
+    it('should set the api url', () => {
       expect(catalog.apiUrl).toEqual(COVID_API_URL);
     });
 
-    it('When constructed, the catalog url should be set', () => {
+    it('should set the catalog url', () => {
       expect(catalog.catalogUrl).toEqual(`${COVID_API_URL}/api/catalog/${CATALOG_ID}`);
     });
   });
 
+  describe('Get data product', () => {
+    it(`should create and return a new RdsDataProduct`, () => {
+      expect(new RdsCatalog(server, CATALOG_ID).getDataProduct('')).toBeInstanceOf(RdsDataProduct);
+    });
+  });
+
   describe('Get metadata', () => {
-    it(`When called on the "${CATALOG_ID}" catalog, then the api url should be /api/catalog/${CATALOG_ID}/metadata`, () => {
+    it(`should make an api request to ${COVID_API_URL}/api/catalog/{CATALOG_ID}/metadata`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation();
       const catalog = new RdsCatalog(server, CATALOG_ID);
       expect.assertions(2);
@@ -42,7 +49,7 @@ describe('RdsCatalog', () => {
     beforeEach(() => {
       catalog = new RdsCatalog(server, CATALOG_ID);
     });
-    it(`When called, then resolving should be set to true`, () => {
+    it(`should set resolving to true before calling the api`, () => {
       expect.assertions(1);
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation(
         () =>
@@ -55,7 +62,7 @@ describe('RdsCatalog', () => {
         spy.mockRestore();
       });
     });
-    it(`When the resolution completes, then resolving should be set to false`, () => {
+    it(`should set resolving to false once the api request completes`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation(() => new Promise(resolve => resolve()));
       expect.assertions(1);
       return catalog.resolve().then(() => {
@@ -63,7 +70,7 @@ describe('RdsCatalog', () => {
         spy.mockRestore();
       });
     });
-    it(`When the resolution completes, then it should be marked as resolved`, () => {
+    it(`should set resolved to true when the api request completes sucessfully`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation(() => new Promise(resolve => resolve()));
       expect.assertions(2);
       expect(catalog.isResolved()).toBe(false);
@@ -72,14 +79,14 @@ describe('RdsCatalog', () => {
         spy.mockRestore();
       });
     });
-    it(`When the resolution completes, then the catalog's properties should be set`, () => {
+    it(`should set the catalog's properties once the api request completes sucessfully`, () => {
       fetchMock.mockOnce(JSON.stringify({ catalogCount: 10 }));
       expect.assertions(1);
       return catalog.resolve().then(() => {
         expect(catalog.catalogCount).toBe(10);
       });
     });
-    it(`When the resolution fails, then an error should be thrown`, () => {
+    it(`should throw an error when the api request fails`, () => {
       const fakeError = new Error('fake error message');
       fetchMock.mockRejectOnce(fakeError);
       expect.assertions(1);

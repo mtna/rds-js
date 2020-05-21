@@ -2,6 +2,7 @@
 #### _WARNING: THIS PROJECT IS IN EARLY DEVELOPMENT STAGE. CONTENT OR CODE SHOULD ONLY BE USED FOR TESTING OR EVALUATION PURPOSES._
 
 ![npm](https://img.shields.io/npm/v/@rds/sdk?style=for-the-badge)
+![npm bundle size](https://img.shields.io/bundlephobia/min/@rds/sdk?style=for-the-badge)
 ![Travis (.com) branch](https://img.shields.io/travis/com/mtna/rds-js?style=for-the-badge)
 ![Coveralls github branch](https://img.shields.io/coveralls/github/mtna/rds-js?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/mtna/rds-js?style=for-the-badge)

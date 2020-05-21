@@ -1,3 +1,4 @@
+import { RdsCatalog } from './rds-catalog';
 import { RdsServer } from './rds-server';
 import { HttpUtil } from './utils/http';
 
@@ -12,13 +13,13 @@ describe('RdsServer', () => {
     expect(RdsServer.fromUrlParts('https', 'covis19.richdataservices.com', '/rds')).toBeInstanceOf(RdsServer);
   });
 
-  describe('Setup api url', () => {
-    it('When constructed, the api url should be set', () => {
+  describe('Constructor', () => {
+    it('should set the api url', () => {
       const server = new RdsServer(COVID_API_URL);
       expect(server.apiUrl).toEqual(COVID_API_URL);
     });
 
-    it('When constructed, the url should be parsed into partials', () => {
+    it('should parse the url into partials', () => {
       const server = new RdsServer(COVID_API_URL);
       expect(server.parsedUrl).toBeDefined();
       expect(server.parsedUrl.protocol).toEqual('https');
@@ -26,15 +27,21 @@ describe('RdsServer', () => {
       expect(server.parsedUrl.path).toEqual('/rds');
     });
 
-    it('When constructed, then trailing slashes should be removed from the url', () => {
+    it('should remove trailing slashes from the url', () => {
       const server = new RdsServer(`${COVID_API_URL}/`);
       expect(server.parsedUrl.source).toEqual(COVID_API_URL);
       expect(server.apiUrl).toEqual(COVID_API_URL);
     });
   });
 
+  describe('Get catalog', () => {
+    it(`should create and return a new RdsCatalog`, () => {
+      expect(new RdsServer(COVID_API_URL).getCatalog('')).toBeInstanceOf(RdsCatalog);
+    });
+  });
+
   describe('Get changelog', () => {
-    it('When called, then the api url should be /api/server/changelog', () => {
+    it(`should make an api request to ${COVID_API_URL}/api/server/changelog`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation();
       const server = new RdsServer(COVID_API_URL);
       return server.getChangelog().then(() => {
@@ -46,7 +53,7 @@ describe('RdsServer', () => {
   });
 
   describe('Get info', () => {
-    it('When called, then the api url should be /api/server/info', () => {
+    it(`should make an api request to ${COVID_API_URL}/api/server/info`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation();
       const server = new RdsServer(COVID_API_URL);
       return server.getInfo().then(() => {
@@ -58,7 +65,7 @@ describe('RdsServer', () => {
   });
 
   describe('Get root catalog', () => {
-    it('When called, then the api url should be /api/catalog', () => {
+    it(`should make an api request to ${COVID_API_URL}/api/catalog`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation();
       const server = new RdsServer(COVID_API_URL);
       return server.getRootCatalog().then(() => {

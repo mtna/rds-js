@@ -4,6 +4,7 @@ import { HttpResponse } from './models/http-response';
 import { ParsedUrl } from './models/parsed-url';
 import { RdsVersion } from './models/server';
 import { ServerInformation } from './models/server/information';
+import { RdsCatalog } from './rds-catalog';
 import { HttpUtil } from './utils/http';
 import { _parseUrl } from './utils/url-parser';
 
@@ -65,6 +66,27 @@ export class RdsServer {
     this.apiUrl = `${this.parsedUrl.protocol}://${this.parsedUrl.host}${this.parsedUrl.port ? ':' + this.parsedUrl.port : ''}${
       this.parsedUrl.path
     }`;
+  }
+
+  /**
+   * Create and get an instance of a RDS Catalog that exists on
+   * this RdsServer. This is a convenience method, these two code snippets
+   * are equivalent:
+   * ```ts
+   * const catalog = new RdsServer('https://covid19.richdataservices.com/rds')
+   *                  .getCatalog('covid19');
+   * ```
+   * and
+   * ```ts
+   * const server = new RdsServer('https://covid19.richdataservices.com/rds');
+   * const catalog = new RdsCatalog(server, 'covid19');
+   * ```
+   * @param catalogId the ID of the specific catalog
+   * @param resolve whether to automatically start resolving all the catalog's own properties, defaults to false
+   * @returns a new RdsCatalog
+   */
+  getCatalog(catalogId: string, resolve = false): RdsCatalog {
+    return new RdsCatalog(this, catalogId, resolve);
   }
 
   /**

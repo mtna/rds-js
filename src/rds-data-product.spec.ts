@@ -7,8 +7,8 @@ import { HttpUtil } from './utils/http';
 
 describe('RdsDataProduct', () => {
   const COVID_API_URL = 'https://covid19.richdataservices.com/rds';
-  const CATALOG_ID = 'covid19';
-  const DATA_PRODUCT_ID = 'us_jhu_ccse_country';
+  const CATALOG_ID = 'int';
+  const DATA_PRODUCT_ID = 'jhu_country';
   const server = new RdsServer(COVID_API_URL);
   const catalog = new RdsCatalog(server, CATALOG_ID);
 
@@ -16,18 +16,18 @@ describe('RdsDataProduct', () => {
     expect(new RdsDataProduct(catalog, DATA_PRODUCT_ID)).toBeInstanceOf(RdsDataProduct);
   });
 
-  describe('Setup api urls', () => {
+  describe('Constructor', () => {
     const dataProduct = new RdsDataProduct(catalog, DATA_PRODUCT_ID);
-    it('When constructed, the data product url should be set', () => {
+    it('should set the api url', () => {
       expect(dataProduct.dataProductUrl).toEqual(`${COVID_API_URL}/api/catalog/${CATALOG_ID}/${DATA_PRODUCT_ID}`);
     });
-    it('When constructed, the query url should be set', () => {
+    it('should set the query url', () => {
       expect(dataProduct.queryUrl).toEqual(`${COVID_API_URL}/api/query/${CATALOG_ID}/${DATA_PRODUCT_ID}`);
     });
   });
 
   describe('Get the record count', () => {
-    it(`When called on the "${CATALOG_ID}" catalog and "${DATA_PRODUCT_ID}" data product, then the api url should be /api/query/${CATALOG_ID}/${DATA_PRODUCT_ID}/count`, () => {
+    it(`should make an api request to ${COVID_API_URL}/api/query/{CATALOG_ID}/{DATA_PRODUCT_ID}/count`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation();
       const dataProduct = new RdsDataProduct(catalog, DATA_PRODUCT_ID);
       expect.assertions(2);
@@ -40,7 +40,7 @@ describe('RdsDataProduct', () => {
   });
 
   describe('Run a select query', () => {
-    it(`When called on the "${CATALOG_ID}" catalog and "${DATA_PRODUCT_ID}" data product, then the api url should be /api/query/${CATALOG_ID}/${DATA_PRODUCT_ID}/select`, () => {
+    it(`should make an api request to ${COVID_API_URL}/api/query/{CATALOG_ID}/{DATA_PRODUCT_ID}/select?`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation();
       const dataProduct = new RdsDataProduct(catalog, DATA_PRODUCT_ID);
       expect.assertions(2);
@@ -53,7 +53,7 @@ describe('RdsDataProduct', () => {
   });
 
   describe('Run a tabulation', () => {
-    it(`When called on the "${CATALOG_ID}" catalog and "${DATA_PRODUCT_ID}" data product, then the api url should be /api/query/${CATALOG_ID}/${DATA_PRODUCT_ID}/tabulate`, () => {
+    it(`should make an api request to ${COVID_API_URL}/api/query/{CATALOG_ID}/{DATA_PRODUCT_ID}/tabulate?`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation();
       const dataProduct = new RdsDataProduct(catalog, DATA_PRODUCT_ID);
       expect.assertions(2);
@@ -71,7 +71,7 @@ describe('RdsDataProduct', () => {
       dataProduct = new RdsDataProduct(catalog, DATA_PRODUCT_ID);
     });
 
-    it(`When called, then resolving should be set to true`, () => {
+    it(`should set resolving to true before calling the api`, () => {
       expect.assertions(1);
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation(
         () =>
@@ -84,7 +84,7 @@ describe('RdsDataProduct', () => {
         spy.mockRestore();
       });
     });
-    it(`When the resolution completes, then resolving should be set to false`, () => {
+    it(`should set resolving to false once the api request completes`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation(() => new Promise(resolve => resolve()));
       expect.assertions(1);
       return dataProduct.resolve().then(() => {
@@ -92,7 +92,7 @@ describe('RdsDataProduct', () => {
         spy.mockRestore();
       });
     });
-    it(`When the resolution completes, then it should be marked as resolved`, () => {
+    it(`should set resolved to true when the api request completes sucessfully`, () => {
       const spy = jest.spyOn(HttpUtil, 'get').mockImplementation(() => new Promise(resolve => resolve()));
       expect.assertions(2);
       expect(dataProduct.isResolved()).toBe(false);
@@ -101,14 +101,14 @@ describe('RdsDataProduct', () => {
         spy.mockRestore();
       });
     });
-    it(`When the resolution completes, then the data product's properties should be set`, () => {
+    it(`should set the data product's properties once the api request completes sucessfully`, () => {
       fetchMock.mockOnce(JSON.stringify({ description: 'fake description' }));
       expect.assertions(1);
       return dataProduct.resolve().then(() => {
         expect(dataProduct.description).toBe('fake description');
       });
     });
-    it(`When the resolution fails, then an error should be thrown`, () => {
+    it(`should throw an error when the api request fails`, () => {
       const fakeError = new Error('fake error message');
       fetchMock.mockRejectOnce(fakeError);
       expect.assertions(1);

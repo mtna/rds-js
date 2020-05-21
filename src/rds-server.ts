@@ -74,12 +74,12 @@ export class RdsServer {
    * are equivalent:
    * ```ts
    * const catalog = new RdsServer('https://covid19.richdataservices.com/rds')
-   *                  .getCatalog('covid19');
+   *                  .getCatalog('int');
    * ```
    * and
    * ```ts
    * const server = new RdsServer('https://covid19.richdataservices.com/rds');
-   * const catalog = new RdsCatalog(server, 'covid19');
+   * const catalog = new RdsCatalog(server, 'int');
    * ```
    * @param catalogId the ID of the specific catalog
    * @param resolve whether to automatically start resolving all the catalog's own properties, defaults to false

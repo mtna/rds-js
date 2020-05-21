@@ -17,8 +17,8 @@ import { serializeRdsParameters } from './utils/url-serializers';
  * @example
  * ```ts
  * const covidServer = new RdsServer('https://covid19.richdataservices.com/rds');
- * const covidCatalog = new RdsCatalog(covidServer, 'covid19');
- * const dataProduct = new RdsDataProduct(covidCatalog, 'us_jhu_ccse_country');
+ * const covidCatalog = new RdsCatalog(covidServer, 'int');
+ * const dataProduct = new RdsDataProduct(covidCatalog, 'jhu_country');
  * dataProduct
  *  .select()
  *  .then(

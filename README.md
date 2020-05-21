@@ -9,7 +9,10 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=for-the-badge)](https://github.com/semantic-release/semantic-release)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=for-the-badge)](https://github.com/prettier/prettier)
 
-<a href="https://www2.richdataservices.com"><img src="https://www2.richdataservices.com/assets/logo.svg" align="left" target="_blank" hspace="10" vspace="6" style="max-width: 200px"></a>
+## Checkout our awesome [examples/showcases][examples] repo.
+<br>
+
+<a href="https://www.richdataservices.com"><img src="./resources/rds-logo.png" align="left" width="200"></a>
 
 **Rich Data Services** (or **RDS**) is a suite of REST APIs designed by Metadata Technology North America (MTNA) to meet various needs for data engineers, managers, custodians, and consumers. RDS provides a range of services including data profiling, mapping, transformation, validation, ingestion, and dissemination. For more information about each of these APIs and how you can incorporate or consume them as part of your work flow please visit the MTNA website.
 
@@ -18,7 +21,7 @@
 Make RDS queries easy. Write strongly typed code. Use RDS-JS.
 
 ## References
-[RDS SDK Documentation](https://mtna.github.io/rds-js/) | [RDS API Documentation](https://covid19.richdataservices.com/rds/swagger/) | [Examples](https://github.com/mtna/rds-js-examples) | [Contributing](CONTRIBUTING.md) | [Developer Documentation](DEVELOPER.md) | [Changelog](https://github.com/mtna/rds-js/releases)
+[RDS SDK Documentation][docs] | [RDS API Documentation](https://covid19.richdataservices.com/rds/swagger/) | [Examples][examples] | [Contributing](CONTRIBUTING.md) | [Developer Documentation](DEVELOPER.md) | [Changelog](https://github.com/mtna/rds-js/releases)
 |---|---|---|---|---|---|
 
 ## Quick start
@@ -31,46 +34,76 @@ Install the sdk into your project.
 npm install @rds/sdk
 ```
 
-#### Initialization
-
-Import `RdsServer` and initialize to indicate where the RDS API is hosted. This must be done a single time before performing any queries.
+### The setup
 
 ```typescript
-import { RdsServer } from '@rds/sdk';
-RdsServer.init('https://', 'covid19.richdataservices.com');
+import { RdsServer, RdsCatalog, RdsDataProduct } from '@rds/sdk';
+
+// Instantiate a new server to define where the RDS API is hosted.
+const server = new RdsServer('https://covid19.richdataservices.com/rds');
+// Instantiate a catalog that exists on the server
+const catalog = new RdsCatalog(server, 'int');
+// Instantiate a data product that exists on the catalog
+const dataProduct = new RdsDataProduct(catalog, 'jhu_country');
 ```
 
-### RDS Query Controller
+These are the basic, foundational building blocks of the RDS SDK. From here, we can explore what catalogs/data products exist on the server, details about them, subset the data through various queries, and downloading customized data packages.
 
-This service is used to query data products for both record level and aggregate data.
+See the [documentation][docs] for the full SDK API.
 
-#### Count
+---
 
-> Get the number of records in a dataset
+### RdsServer
 
-```typescript
-import { HttpResponse, RdsQueryController } from '@rds/sdk';
+Represents a single RDS API server, provides methods to query server-level information.
 
-const CATALOG_ID = 'covid19';
-const DATA_PRODUCT_ID = 'us_jhu_ccse_country';
-
-RdsQueryController
-  .count(CATALOG_ID, DATA_PRODUCT_ID)
-  .then((res: HttpResponse<number>) =>
-    { console.log(`Found ${res.parsedBody} records!`); }
+> Get the root catalog on the server
+```ts
+import { RdsServer } from '@rds/sdk';
+const server = new RdsServer('https://covid19.richdataservices.com/rds');
+server
+  .getRootCatalog()
+  .then(res=>
+    console.log(`There are ${res.parsedBody.catalogs.length} catalogs on this server!`)
   );
 ```
 
-#### Select
+---
 
-> Running a select query on the specified data product returns record level microdata.
+### RdsCatalog
 
-```typescript
-import { AmchartsDataSet, HttpResponse, RdsQueryController, RdsSelectParameters } from '@rds/sdk';
+Represents a single catalog on a server, provides methods to query catalog related information.
 
-const CATALOG_ID = 'covid19';
-const DATA_PRODUCT_ID = 'us_jhu_ccse_country';
-const PARAMS: RdsSelectParameters = {
+> Resolve properties about the catalog
+```ts
+import { RdsCatalog } from '@rds/sdk';
+// Given a previously instantiated server, like in the examples above
+const catalog = new RdsCatalog(server, 'int');
+catalog
+  .resolve()
+  .then(()=>
+    catalog.name; // Name of catalog
+    catalog.description; // Catalog description
+    catalog.dataProducts; // All the data products on this catalog
+    // See the docs for all the possible properties
+  );
+```
+
+---
+
+### RdsDataProduct
+
+Represents a single data product within a catalog, provides methods to query data product related information.
+
+> Run a **select** query to get record level microdata.
+
+```ts
+import { AmchartsDataSet, HttpResponse, RdsDataProduct, RdsSelectParameters } from '@rds/sdk';
+
+// Given the catalog from the above examples
+const dataProduct = new RdsDataProduct(catalog, 'jhu_country');
+// Specify some parameters
+const params: RdsSelectParameters = {
   cols: 'date_stamp,cnt_confirmed,cnt_death,cnt_recovered',
   where: '(iso3166_1=US)',
   metadata: true,
@@ -78,33 +111,38 @@ const PARAMS: RdsSelectParameters = {
   format: 'amcharts'
 };
 
-RdsQueryController
-  .select<AmchartsDataSet>(CATALOG_ID, DATA_PRODUCT_ID, PARAMS)
+dataProduct
+  .select<AmchartsDataSet>(params)
   .then((res: HttpResponse<AmchartsDataSet>) =>
-    { /** Make a cool visualization */ }
+    { /* Make a cool visualization */ }
   );
 ```
 
-#### Tabulate
-
-> Running tabulations on the specified data product returns aggregate level data about the dimensions and measures specified.
+> Run a **tabulation** to get aggregate level data about the dimensions and measures specified.
 
 ```typescript
-import { AmchartsDataSet, HttpResponse, RdsQueryController, RdsTabulateParameters } from '@rds/sdk';
+import { PlotlyDataSet, HttpResponse, RdsDataProduct, RdsTabulateParameters } from '@rds/sdk';
 
-const CATALOG_ID = 'covid19';
-const DATA_PRODUCT_ID = 'us_jhu_ccse_country';
-const PARAMS: RdsTabulateParameters = {
-  dims: 'iso3166_1',
-  measure: 'cnt_confirmed:SUM(cnt_confirmed),cnt_death:SUM(cnt_death),cnt_recovered:SUM(cnt_recovered)',
-  orderby: 'cnt_confirmed DESC',
+// Given the catalog from the above examples
+const dataProduct = new RdsDataProduct(catalog, 'jhu_country');
+// Specify some parameters
+const params: RdsTabulateParameters = {
+  dims: 'date_stamp,iso3166_1',
+  measure: 'cnt_confirmed:SUM(cnt_confirmed)',
+  where: '(year_stamp=2020) AND (iso3166_1=US OR iso3166_1=CA OR iso3166_1=ES OR iso3166_1=IT OR iso3166_1=CN)',
+  orderby: 'date_stamp ASC,iso3166_1 ASC',
   metadata: true,
-  limit: 10
+  inject: true,
+  totals: true,
+  format: 'plotly_heatmap'
 };
 
-RdsQueryController
-  .tabulate<AmchartsDataSet>(CATALOG_ID, DATA_PRODUCT_ID, PARAMS)
-  .then((res: HttpResponse<AmchartsDataSet>) =>
-    { /** Make a cool visualization */ }
+dataProduct
+  .tabulate<PlotlyDataSet>(params)
+  .then((res: HttpResponse<PlotlyDataSet>) =>
+    { /* Make a cool visualization */ }
   );
 ```
+
+[docs]: https://mtna.github.io/rds-js/
+[examples]: https://github.com/mtna/rds-js-examples

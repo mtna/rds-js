@@ -1,5 +1,5 @@
-import { RdsSelectParameters } from '../parameters/select';
-import { RdsTabulateParameters } from '../parameters/tabulate';
+import { RdsSelectParameters } from '../models/parameters/select';
+import { RdsTabulateParameters } from '../models/parameters/tabulate';
 
 /**
  * Serialize a parameter that has an array of values into a url query parameter.

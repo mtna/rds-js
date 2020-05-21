@@ -1,7 +1,4 @@
-/** Typed http reponse */
-export interface HttpResponse<T> extends Response {
-  parsedBody?: T;
-}
+import { HttpResponse } from '../models/http-response';
 
 /**
  * Utility to make strongly typed HTTP requests.

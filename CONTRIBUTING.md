@@ -17,7 +17,7 @@ Help us keep RDS-JS open and inclusive. Please read and follow our [Code of Cond
 
 ## <a name="question"></a> Got a Question or Problem?
 
-Do not open issues for general support questions as we want to keep GitHub issues for bug reports and feature requests. You've got much better chances of getting your question answered by sending an email to our [support team](mailto:mtna@mtna.us).
+Do not open issues for general support questions as we want to keep GitHub issues for bug reports and feature requests. You've got much better chances of getting your question answered by visiting our [help desk](https://mtnaus.atlassian.net/servicedesk/customer/portal/8).
 
 ## <a name="issue"></a> Found a Bug?
 

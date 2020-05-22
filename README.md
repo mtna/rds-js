@@ -1,4 +1,5 @@
 # RDS - JS
+
 #### _WARNING: THIS PROJECT IS IN EARLY DEVELOPMENT STAGE. CONTENT OR CODE SHOULD ONLY BE USED FOR TESTING OR EVALUATION PURPOSES._
 
 ![npm](https://img.shields.io/npm/v/@rds/sdk?style=for-the-badge)
@@ -11,6 +12,9 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=for-the-badge)](https://github.com/prettier/prettier)
 
 ## Checkout our awesome [examples/showcases][examples] repo.
+
+## Start using the sdk with our [stackblitz template](https://stackblitz.com/fork/rds-sdk-template)
+
 <br>
 
 <a href="https://www.richdataservices.com"><img src="./resources/rds-logo.png" align="left" width="200"></a>
@@ -22,8 +26,10 @@
 Make RDS queries easy. Write strongly typed code. Use RDS-JS.
 
 ## References
-[RDS SDK Documentation][docs] | [RDS API Documentation](https://covid19.richdataservices.com/rds/swagger/) | [Examples][examples] | [Contributing](CONTRIBUTING.md) | [Developer Documentation](DEVELOPER.md) | [Changelog](https://github.com/mtna/rds-js/releases)
-|---|---|---|---|---|---|
+
+| [RDS SDK Documentation][docs] | [RDS API Documentation](https://covid19.richdataservices.com/rds/swagger/) | [Examples][examples] | [Contributing](CONTRIBUTING.md) | [Developer Documentation](DEVELOPER.md) | [Changelog](https://github.com/mtna/rds-js/releases) |
+| ----------------------------- | -------------------------------------------------------------------------- | -------------------- | ------------------------------- | --------------------------------------- | ---------------------------------------------------- |
+
 
 ## Quick start
 
@@ -59,14 +65,11 @@ See the [documentation][docs] for the full SDK API.
 Represents a single RDS API server, provides methods to query server-level information.
 
 > Get the root catalog on the server
+
 ```ts
 import { RdsServer } from '@rds/sdk';
 const server = new RdsServer('https://covid19.richdataservices.com/rds');
-server
-  .getRootCatalog()
-  .then(res=>
-    console.log(`There are ${res.parsedBody.catalogs.length} catalogs on this server!`)
-  );
+server.getRootCatalog().then(res => console.log(`There are ${res.parsedBody.catalogs.length} catalogs on this server!`));
 ```
 
 ---
@@ -76,6 +79,7 @@ server
 Represents a single catalog on a server, provides methods to query catalog related information.
 
 > Resolve properties about the catalog
+
 ```ts
 import { RdsCatalog } from '@rds/sdk';
 // Given a previously instantiated server, like in the examples above
@@ -112,11 +116,9 @@ const params: RdsSelectParameters = {
   format: 'amcharts'
 };
 
-dataProduct
-  .select<AmchartsDataSet>(params)
-  .then((res: HttpResponse<AmchartsDataSet>) =>
-    { /* Make a cool visualization */ }
-  );
+dataProduct.select<AmchartsDataSet>(params).then((res: HttpResponse<AmchartsDataSet>) => {
+  /* Make a cool visualization */
+});
 ```
 
 > Run a **tabulation** to get aggregate level data about the dimensions and measures specified.
@@ -138,11 +140,9 @@ const params: RdsTabulateParameters = {
   format: 'plotly_heatmap'
 };
 
-dataProduct
-  .tabulate<PlotlyDataSet>(params)
-  .then((res: HttpResponse<PlotlyDataSet>) =>
-    { /* Make a cool visualization */ }
-  );
+dataProduct.tabulate<PlotlyDataSet>(params).then((res: HttpResponse<PlotlyDataSet>) => {
+  /* Make a cool visualization */
+});
 ```
 
 [docs]: https://mtna.github.io/rds-js/

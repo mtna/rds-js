@@ -57,14 +57,14 @@
     "@mtna/pojo-base-ui": "^9.0.2",
     "@mtna/pojo-consumer-ui": "^1.1.9",
     "@types/google.visualization": "0.0.52",
-    "snyk": "^1.321.0"
+    "snyk": "^1.323.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^7.1.2",
     "@mtna/prettier-config-ui": "^1.0.1",
     "@types/jest": "^23.3.2",
-    "@types/node": "^10.11.0",
+    "@types/node": "^10.17.24",
     "colors": "^1.3.2",
     "commitizen": "^4.1.2",
     "coveralls": "^3.0.2",

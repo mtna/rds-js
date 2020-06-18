@@ -56,7 +56,7 @@
     "@mtna/model-predefined-data-ui": "^1.1.6",
     "@mtna/pojo-base-ui": "^9.0.2",
     "@mtna/pojo-consumer-ui": "^1.1.9",
-    "@types/google.visualization": "0.0.52",
+    "@types/google.visualization": "0.0.53",
     "snyk": "^1.330.2"
   },
   "devDependencies": {

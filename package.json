@@ -57,7 +57,7 @@
     "@mtna/pojo-base-ui": "^9.0.2",
     "@mtna/pojo-consumer-ui": "^1.1.9",
     "@types/google.visualization": "0.0.53",
-    "snyk": "^1.323.0"
+    "snyk": "^1.330.2
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
@@ -86,7 +86,7 @@
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-sourcemaps": "^0.6.2",
     "rollup-plugin-typescript2": "^0.27.1",
-    "semantic-release": "^17.0.7",
+    "semantic-release": "^17.0.8",
     "shelljs": "^0.8.3",
     "travis-deploy-once": "^5.0.9",
     "ts-jest": "^25.5.1",
@@ -95,7 +95,7 @@
     "tslint-config-prettier": "^1.15.0",
     "tslint-config-standard": "^8.0.1",
     "typedoc": "^0.17.7",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.3"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [

@@ -57,7 +57,7 @@
     "@mtna/pojo-base-ui": "^9.0.2",
     "@mtna/pojo-consumer-ui": "^1.1.9",
     "@types/google.visualization": "0.0.52",
-    "snyk": "^1.323.0"
+    "snyk": "^1.330.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
@@ -95,7 +95,7 @@
     "tslint-config-prettier": "^1.15.0",
     "tslint-config-standard": "^8.0.1",
     "typedoc": "^0.17.7",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.3"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [

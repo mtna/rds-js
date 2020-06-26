@@ -15,6 +15,7 @@
     "Data dissemination"
   ],
   "homepage": "https://www.richdataservices.com/",
+  "funding": "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GKAYVJSBLN92E",
   "main": "dist/rds-sdk.umd.js",
   "module": "dist/rds-sdk.es5.js",
   "typings": "dist/types/public_api.d.ts",

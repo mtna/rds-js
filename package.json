@@ -15,6 +15,7 @@
     "Data dissemination"
   ],
   "homepage": "https://www.richdataservices.com/",
+  "funding": "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GKAYVJSBLN92E",
   "main": "dist/rds-sdk.umd.js",
   "module": "dist/rds-sdk.es5.js",
   "typings": "dist/types/public_api.d.ts",
@@ -95,7 +96,7 @@
     "tslint-config-prettier": "^1.15.0",
     "tslint-config-standard": "^8.0.1",
     "typedoc": "^0.17.7",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.4"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
